@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using RealTime.Data;
 using RealTime.Models;
 using RealTime.Services;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.WebSockets;
 
 namespace RealTime
 {
@@ -52,6 +54,8 @@ namespace RealTime
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            
+            services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +90,7 @@ namespace RealTime
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseSignalR();
         }
     }
 }
