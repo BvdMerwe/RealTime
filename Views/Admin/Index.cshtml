@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="panel-group"></div>
+<div class="panel" id="adminApp">
+    <div class="panel-header"></div>
+    <div class="panel-body" >
+        <span>Connected:</span> <span id="connected-users">{{connectedCount}}</span>
+        <ul id="">
+
+        </ul>
+</div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            var adminApp;
+            // Declare a proxy to reference the hub. 
+            var chat = $.connection.chatHub;
+            //Callback methods
+            chat.client.updateUserCount = function (count) {
+               if (adminApp != undefined) adminApp.connectedCount = count;
+            };
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+                adminApp = new Vue({
+                    el: "#adminApp",
+                    data: {
+                        connectedUsers: {
+
+                        },
+                        connectedCount: 0
+                    }, 
+                    methods: {
+                        getUsers: function(){
+
+                        },
+                        getCount: function(){
+                            this.connectedCount = parseInt(chat.server.getUserCount());
+                            console.log(parseInt(chat.server.getUserCount()));
+                        }
+                    },
+                    created: function (){
+                        this.getCount()
+                    }
+                });
+            });
+        });
+    </script>
+}
