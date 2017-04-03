@@ -3,11 +3,16 @@
 }
 <div class="panel-group"></div>
 <div class="panel" id="adminApp">
+    <div class="container" v-on:keyup.enter="connectTo">
+        <p v-if="connectedError">Please specify some values!</p>
+        <input type="text" id="room" v-model="room" />
+        <input type="button" id="connect" value="connect" v-on:click.prevent="connectTo" />
+    </div>
     <div class="panel-header"></div>
     <div class="panel-body" >
         <span>Connected:</span> <span id="connected-users">{{connectedCount}}</span>
         <ul id="">
-
+            <li v-for="user in connectedUsers">{{user.name}}</li>
         </ul>
 </div>
 </div>
@@ -18,20 +23,42 @@
             // Declare a proxy to reference the hub. 
             var chat = $.connection.chatHub;
             //Callback methods
-            chat.client.updateUserCount = function (count) {
+            chat.client.updateUsers = function (count, users) {
                if (adminApp != undefined) adminApp.connectedCount = count;
+
             };
             // Start the connection.
             $.connection.hub.start().done(function () {
                 adminApp = new Vue({
                     el: "#adminApp",
                     data: {
+                        connected: false,
+                        connectedError: false,
+                        room: "",
+                        name: "",
                         connectedUsers: {
 
                         },
                         connectedCount: 0
                     }, 
                     methods: {
+                        connectTo: function() {
+                            if (this.room !== "") {
+                                this.name = "admin";
+                                var c = chat.server.joinRoom(this.name, this.room).done(function(){
+                                    adminApp.connected = true;
+                                    adminApp.connectedError = false;
+                                    adminApp.getUserDetails();
+                                });
+                            } else {
+                                this.connectedError = true;
+                            }
+                        },
+                        getUserDetails: function(){
+                            chat.server.getUserDetails(this.room).done(function (e) {
+                                console.log(e);
+                            });
+                        },
                         getUsers: function(){
 
                         },

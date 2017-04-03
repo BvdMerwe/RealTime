@@ -2,38 +2,74 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="container">
-        <input type="text" id="message" />
-        <input type="button" id="sendmessage" value="Send" />
+<div class="page-header">
+    <h1>Tester <small>ONLY TESTING</small></h1>
+</div>
+<div class="container" id="app">
+    <div class="container" v-if="!connected" v-on:keyup.enter="connectTo">
+        <p v-if="connectedError">Please specify some values!</p>
+        <input type="text" id="room" v-model="room" />
+        <input type="text" id="name" v-model="name" />
+        <input type="button" id="connect" value="connect" v-on:click.prevent="connectTo" />
+    </div>
+    <div class="container" v-if="connected">
+        <input type="text" id="message" v-model="message" v-on:keyup.enter="sendMessage" />
+        <input type="button" id="sendmessage" value="Send" v-on:click.prevent="sendMessage" />
         <input type="hidden" id="displayname" />
         <ul id="discussion">
         </ul>
     </div>
+</div>
 @section scripts {
     <script type="text/javascript">
         $(function () {
+            var app;
             // Declare a proxy to reference the hub. 
             var chat = $.connection.chatHub;
             // Create a function that the hub can call to broadcast messages.
-            chat.client.broadcastMessage = function (name, message) {
-                // Html encode display name and message. 
-                var encodedName = $('<div />').text(name).html();
-                var encodedMsg = $('<div />').text(message).html();
-                // Add the message to the page. 
-                $('#discussion').append('<li><strong>' + encodedName
-                    + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+            chat.client.addChatMessage = function (name, message) {
+                app.updateChat(name, message);
             };
             // Get the user name and store it to prepend to messages.
-            $('#displayname').val(prompt('Enter your name:', ''));
+            // $('#displayname').val(prompt('Enter your name:', ''));
             // Set initial focus to message input box.  
             $('#message').focus();
             // Start the connection.
             $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-                    // Call the Send method on the hub. 
-                    chat.server.send($('#displayname').val(), $('#message').val());
-                    // Clear text box and reset focus for next comment. 
-                    $('#message').val('').focus();
+                app = new Vue({
+                    el: "#app",
+                    data: {
+                        connected: false,
+                        connectedError: false,
+                        room: "",
+                        name: "",
+                        message: ""
+                    }, 
+                    methods: {
+                        connectTo: function() {
+                            if (this.room !== "" && this.name !== "") {
+                                chat.server.joinRoom(this.name, this.room);
+                                this.connected = true;
+                                this.connectedError = false;
+                            } else {
+                                this.connectedError = true;
+                            }
+                        },
+                        sendMessage: function(){
+                            chat.server.send(this.name, this.room, this.message);
+                            this.message = "";
+                        },
+                        updateChat: function(name, message){
+                            var encodedName = $('<div />').text(name).html();
+                            var encodedMsg = $('<div />').text(message).html();
+                            // Add the message to the page. 
+                            $('#discussion').append('<li><strong>' + encodedName
+                                + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+                        }
+                    },
+                    created: function (){
+                        
+                    }
                 });
             });
         });
