@@ -22,5 +22,10 @@ namespace RealTime.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Setlist> Setlists {get;set;}
+        public DbSet<Question> Questions {get;set;}
+        public DbSet<QuestionType> QuestionTypes {get;set;}
+        public DbSet<Answer> Answers {get;set;}
     }
 }

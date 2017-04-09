@@ -1,0 +1,17 @@
+@using RealTime.Models.ViewModels
+@model QuestionViewModel
+@{
+    ViewData["Title"] = "Questions";
+}
+
+<h1>Questions</h1>
+
+@foreach (var q in Model.Questions) {
+    <div>
+        <dl>
+            <dt>@q.QuestionContent</dt>
+            @foreach (var a in q.Answers) {
+                <dl>@a.AnswerContent</dl>
+            }
+    </div>
+}

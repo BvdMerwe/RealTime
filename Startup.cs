@@ -14,6 +14,7 @@ using RealTime.Models;
 using RealTime.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebSockets;
+using RealTime.Extensions;
 
 namespace RealTime
 {
@@ -43,12 +44,12 @@ namespace RealTime
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+                
             services.AddMvc();
 
             // Add application services.
@@ -91,6 +92,13 @@ namespace RealTime
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             app.UseSignalR();
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();       
+                context.Database.Migrate();
+                context.EnsureSeedData();
+            }
         }
     }
 }
