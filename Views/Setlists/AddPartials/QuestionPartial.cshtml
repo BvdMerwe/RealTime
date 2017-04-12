@@ -1,0 +1,10 @@
+@model RealTime.Models.ViewModels.QuestionViewModel
+
+<label asp-for="Model.QuestionContent" class="col-md-2 control-label"></label>
+<div class="col-md-10">
+    <input asp-for="Model.QuestionContent" class="form-control" />
+    <span asp-validation-for="Model.QuestionContent" class="text-danger"></span>
+</div>
+@foreach (var a in Model.Answers) {
+    @Html.EditorFor(model => a)
+}

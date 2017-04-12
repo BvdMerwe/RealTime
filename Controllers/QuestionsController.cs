@@ -16,8 +16,8 @@ namespace RealTime.Controllers {
             // var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             // optionsBuilder.UseSqlite("Data Source=./RealTime.db");
             // using (var _dbContext = new ApplicationDbContext(optionsBuilder.Options)) {
-                var model = new QuestionViewModel(){
-                    Questions = _dbContext.Questions.ToList()
+                var model = new QuestionsViewModel(){
+                    Questions = _dbContext.Questions.Include(q => q.Answers).ToList()
                 };
                 return View(model);
             // }

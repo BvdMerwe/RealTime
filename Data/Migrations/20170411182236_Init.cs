@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace RealTime.Data.Migrations
 {
-    public partial class CreateQA : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +14,7 @@ namespace RealTime.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Type = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -26,7 +27,7 @@ namespace RealTime.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ApplicationUserId = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
@@ -48,7 +49,7 @@ namespace RealTime.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     QuestionContent = table.Column<string>(nullable: true),
                     QuestionTypeId = table.Column<int>(nullable: true),
@@ -76,7 +77,7 @@ namespace RealTime.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AnswerContent = table.Column<string>(nullable: true),
                     Correct = table.Column<bool>(nullable: false),
                     QuestionId = table.Column<int>(nullable: true)
@@ -91,6 +92,18 @@ namespace RealTime.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "AspNetUserClaims",
+                nullable: false)
+                .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "AspNetRoleClaims",
+                nullable: false)
+                .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
@@ -126,6 +139,16 @@ namespace RealTime.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Setlists");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "AspNetUserClaims",
+                nullable: false);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "AspNetRoleClaims",
+                nullable: false);
         }
     }
 }

@@ -5,7 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealTime.Models {
     public class Setlist {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Setlist() {
+            Questions = new List<Question>();
+            DateCreated = DateTime.Now;
+        }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Theme { get; set; }

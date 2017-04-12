@@ -1,0 +1,17 @@
+@model RealTime.Models.ViewModels.AnswerViewModel
+
+
+<div class="form-group answers">
+    <label asp-for="Model.AnswerContent" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="Model.AnswerContent" class="form-control" />
+        <span asp-validation-for="Model.AnswerContent" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group answers">
+    <label asp-for="Model.Correct" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="Model.Correct" class="form-control" />
+        <span asp-validation-for="Model.Correct" class="text-danger"></span>
+    </div>
+</div>

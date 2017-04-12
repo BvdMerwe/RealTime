@@ -1,0 +1,30 @@
+@using RealTime.Models.ViewModels
+@model SetlistsViewModel
+@{
+    ViewBag.Title = "Setlists";
+}
+
+<h1>@ViewBag.Title <a asp-action="Add" class="btn btn-default">New Setlist</a></h1>
+
+@foreach (var s in Model.Setlists) {
+    <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" data-target="#setlist@(s.Id)">@s.Name</div>
+            <div class="panel-body collapse out" id="setlist@(s.Id)">
+                @foreach (var q in s.Questions) {
+                    <div class="panel panel-default">
+                        <div class="panel-heading" data-toggle="collapse" data-target="#question@(q.Id)">@q.QuestionContent</div>
+                        <div class="panel-body collapse out" id="question@(q.Id)">
+                        @foreach (var a in q.Answers) {
+                            <div class="row panel">
+                                <input type="checkbox" class="col-md-1" @(a.Correct ? "checked" : "")/>
+                                <div class="col-md-11">@a.AnswerContent</div>
+                            </div>
+                        }
+                        <a href="javascript:void(0)" class="btn btn-default">Add Answer</a>
+                        </div>
+                    </div>
+                }
+                <a href="javascript:void(0)" class="btn btn-default">Add Question</a>
+            </div>
+    </div>
+}

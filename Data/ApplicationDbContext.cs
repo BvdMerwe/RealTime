@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RealTime.Models;
@@ -21,6 +18,30 @@ namespace RealTime.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<Setlist>()
+            .HasKey(p => new { p.Id });
+            builder.Entity<Setlist>()
+                .Property(p => p.Id)
+                .UseSqlServerIdentityColumn();
+
+            builder.Entity<Question>()
+            .HasKey(p => new { p.Id });
+            builder.Entity<Question>()
+                .Property(p => p.Id)
+                .UseSqlServerIdentityColumn();
+
+            builder.Entity<QuestionType>()
+            .HasKey(p => new { p.Id });
+            builder.Entity<QuestionType>()
+                .Property(p => p.Id)
+                .UseSqlServerIdentityColumn();
+
+            builder.Entity<Answer>()
+            .HasKey(p => new { p.Id });
+            builder.Entity<Answer>()
+                .Property(p => p.Id)
+                .UseSqlServerIdentityColumn();
         }
 
         public DbSet<Setlist> Setlists {get;set;}

@@ -1,0 +1,16 @@
+@model RealTime.Models.ViewModels.QuestionViewModel
+
+<div class="form-group">
+    <label asp-for="QuestionContent" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="QuestionContent" class="form-control" />
+        <span asp-validation-for="QuestionContent" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    @Html.EditorFor(model => model.Type)
+</div>
+@for (var i = 0; i < Model.Answers.Count; i++) {
+    
+    @Html.EditorFor(model => model.Answers)
+}

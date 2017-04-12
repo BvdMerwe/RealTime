@@ -11,7 +11,7 @@
         <dl>
             <dt>@q.QuestionContent</dt>
             @foreach (var a in q.Answers) {
-                <dl>@a.AnswerContent</dl>
+                <dl class="@(a.Correct ? "text-danger" : "")">@a.AnswerContent</dl>
             }
     </div>
 }

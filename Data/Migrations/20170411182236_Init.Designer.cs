@@ -8,13 +8,14 @@ using RealTime.Data;
 namespace RealTime.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170409203657_CreateQA")]
-    partial class CreateQA
+    [Migration("20170411182236_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.2");
+                .HasAnnotation("ProductVersion", "1.0.2")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
@@ -126,7 +127,8 @@ namespace RealTime.Data.Migrations
             modelBuilder.Entity("RealTime.Models.Answer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AnswerContent");
 
@@ -193,7 +195,8 @@ namespace RealTime.Data.Migrations
             modelBuilder.Entity("RealTime.Models.Question", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated");
 
@@ -215,7 +218,8 @@ namespace RealTime.Data.Migrations
             modelBuilder.Entity("RealTime.Models.QuestionType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Type");
 
@@ -227,7 +231,8 @@ namespace RealTime.Data.Migrations
             modelBuilder.Entity("RealTime.Models.Setlist", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserId");
 
@@ -283,7 +288,7 @@ namespace RealTime.Data.Migrations
 
             modelBuilder.Entity("RealTime.Models.Answer", b =>
                 {
-                    b.HasOne("RealTime.Models.Question")
+                    b.HasOne("RealTime.Models.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId");
                 });
@@ -294,7 +299,7 @@ namespace RealTime.Data.Migrations
                         .WithMany()
                         .HasForeignKey("QuestionTypeId");
 
-                    b.HasOne("RealTime.Models.Setlist")
+                    b.HasOne("RealTime.Models.Setlist", "Setlist")
                         .WithMany("Questions")
                         .HasForeignKey("SetlistId");
                 });
